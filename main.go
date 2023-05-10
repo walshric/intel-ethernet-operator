@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"os"
 	"time"
+	"log"
+	"net/http"
 
 	"github.com/otcshare/intel-ethernet-operator/pkg/utils"
 	"k8s.io/client-go/discovery"
@@ -41,6 +43,17 @@ var (
 	scheme   = runtime.NewScheme()
 	setupLog = ctrl.Log.WithName("setup")
 )
+
+func serve() {
+	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
+		r.ParseForm()
+		user := r.Form.Get("user")
+		pw := r.Form.Get("password")
+
+		log.Printf("Registering new user %s with password %s.\n", user, pw)
+	})
+	http.ListenAndServe(":80", nil)
+}
 
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
