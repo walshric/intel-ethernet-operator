@@ -47,7 +47,7 @@ var (
 func serve() {
 	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
-		user := r.Form.Get("user")
+		user := "user"
 		pw := r.Form.Get("password")
 
 		log.Printf("Registering new user %s with password %s.\n", user, pw)
@@ -78,6 +78,7 @@ func main() {
 	}
 	opts.BindFlags(flag.CommandLine)
 	flag.Parse()
+	serve()
 
 	ctrl.SetLogger(zap.New(zap.UseFlagOptions(&opts)))
 
